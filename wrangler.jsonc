@@ -20,7 +20,7 @@
   ],
 
   "vars": {
-    "MEDIA_HOSTS": "media.example.com,cdn.example.com"
+    "MEDIA_HOSTS": "redirect-passer.pages.dev"
   },
 
   "observability": {

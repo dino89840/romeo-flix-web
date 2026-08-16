@@ -15,12 +15,18 @@ function toBase64Url(input: ArrayBuffer): string {
     .replaceAll("=", "");
 }
 
-function fromBase64Url(input: string): Uint8Array {
+function fromBase64Url(input: string): ArrayBuffer {
   const base64 = input.replaceAll("-", "+").replaceAll("_", "/");
   const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
   const binary = atob(padded);
 
-  return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+  const bytes = new Uint8Array(binary.length);
+
+  for (let i = 0; i < binary.length; i++) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+
+  return bytes.buffer;
 }
 
 async function hmac(secret: string, value: string): Promise<ArrayBuffer> {

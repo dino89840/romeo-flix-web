@@ -4,6 +4,23 @@ import { getDB } from "@/lib/db";
 import { validateMediaOrigin } from "@/lib/media";
 import type { Movie } from "@/lib/types";
 
+type MovieRequestBody = {
+  title?: string;
+  slug?: string;
+  original_title?: string;
+  description?: string;
+  poster_url?: string;
+  backdrop_url?: string;
+  source_url?: string;
+  download_name?: string;
+  category?: string;
+  year?: number | null;
+  duration_min?: number | null;
+  quality?: string;
+  published?: boolean;
+  featured?: boolean;
+};
+
 export async function PUT(
   request: NextRequest,
   context: { params: Promise<{ id: string }> }
@@ -13,7 +30,7 @@ export async function PUT(
   }
 
   const { id } = await context.params;
-  const body = await request.json();
+  const body = (await request.json()) as MovieRequestBody;
 
   if (!body.title || !body.slug || !body.poster_url || !body.source_url) {
     return NextResponse.json(

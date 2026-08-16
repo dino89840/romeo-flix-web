@@ -78,15 +78,31 @@ export default function AdminPanel({
       })
     });
 
-    const data = await response.json().catch(() => null);
-    setSaving(false);
+    type SaveResponse =
+  | { movie: Movie }
+  | { error: string };
 
-    if (!response.ok) {
-      alert(data?.error ?? "Save failed");
-      return;
-    }
+const data = (await response.json().catch(() => null)) as
+  | SaveResponse
+  | null;
 
-    const movie = data.movie as Movie;
+setSaving(false);
+
+if (!response.ok) {
+  alert(
+    data && "error" in data
+      ? data.error
+      : "Save failed"
+  );
+  return;
+}
+
+if (!data || !("movie" in data)) {
+  alert("Invalid server response");
+  return;
+}
+
+const movie = data.movie;
 
     setMovies((current) =>
       editing
